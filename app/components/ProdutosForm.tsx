@@ -1,38 +1,25 @@
-'use client';
+import { useProdutos } from "../hooks/useProduto";
+import { useEffect } from "react";
 
-import { useEffect } from 'react';
-import { useProdutos } from '@/app/hooks/useProduto';
-import Link from 'next/link';
-import '../../formStyle.css';
-import NavBar from '@/app/components/navBar';
-import ProdutosForm from '@/app/components/ProdutosForm';
-
-export default function ProdutosPage() {
+export default function ProdutosForm({ produtoId }: { produtoId?: number }) {
     const {
-        produtos, loading, listarProdutos, salvar, excluir, prepararEdicao,
+        salvar, buscarProdutoPorId,
         nome, setNome, descricao, setDescricao, preco, setPreco, url, setUrl,
         editandoId, limparFormulario
     } = useProdutos();
 
     useEffect(() => {
-        listarProdutos();
-    }, [listarProdutos]);
+        if (produtoId) {
+            buscarProdutoPorId(produtoId);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [produtoId]);
 
     return (
-        <>
-
-
-        <NavBar />
-
-        {/* Como não passamos o produtoId, o form entende que é uma criação limpa */}
-        <ProdutosForm />
-
-        
         <div className="login-container" style={{ padding: '20px', minHeight: '100vh' }}>
-            
             <div className="login-card" style={{ width: '100%', maxWidth: '500px', marginBottom: '30px' }}>
                 <h1>{editandoId ? 'Editar Produto' : 'Novo Produto'}</h1>
-                
+
                 <form onSubmit={salvar}>
                     <div className="input-group">
                         <input type="text" placeholder="Nome do Produto" className="input-field"
@@ -55,7 +42,7 @@ export default function ProdutosPage() {
                         {editandoId ? 'Atualizar Produto' : 'Cadastrar Produto'}
                     </button>
                     {editandoId && (
-                        <button type="button" onClick={limparFormulario} 
+                        <button type="button" onClick={limparFormulario}
                                 style={{ background: 'none', border: 'none', color: 'gray', marginTop: '10px', cursor: 'pointer' }}>
                             Cancelar Edição
                         </button>
@@ -63,6 +50,5 @@ export default function ProdutosPage() {
                 </form>
             </div>
         </div>
-        </>
     );
 }

@@ -10,18 +10,17 @@ export function useProdutos() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    // Estados para o formulário (seguindo seu padrão de states separados)
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     const [preco, setPreco] = useState('');
     const [url, setUrl] = useState('');
     const [editandoId, setEditandoId] = useState<number | null>(null);
 
-    // GET - Listar
+    // GET - Listar todos
     const listarProdutos = useCallback(async () => {
         setLoading(true);
         try {
-            const resposta = await api.get('/produtos');
+            const resposta = await api.get('/produtos/');
             setProdutos(resposta.data);
         } catch (error) {
             alert("Erro ao buscar produtos");
@@ -30,6 +29,17 @@ export function useProdutos() {
         }
     }, []);
 
+    // GET - Buscar um produto específico pelo ID
+    const buscarProdutoPorId = async (id: number) => {
+        try {
+            const resposta = await api.get(`/produtos/${id}`);
+            prepararEdicao(resposta.data);
+        } catch (error) {
+            alert("Erro ao buscar os detalhes do produto.");
+            router.push('/dashboard/produtos');
+        }
+    };
+
     // POST / PUT - Salvar
     const salvar = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,9 +47,9 @@ export function useProdutos() {
 
         try {
             if (editandoId) {
-                await api.put(`/produtos${editandoId}`, dados);
+                await api.put(`/produtos/${editandoId}`, dados);
             } else {
-                await api.post('/produtos', dados);
+                await api.post('/produtos/', dados);
             }
             limparFormulario();
             alert("Sucesso!");
@@ -79,6 +89,6 @@ export function useProdutos() {
     return {
         produtos, loading, listarProdutos, salvar, excluir, prepararEdicao,
         nome, setNome, descricao, setDescricao, preco, setPreco, url, setUrl,
-        editandoId, limparFormulario
+        editandoId, limparFormulario, buscarProdutoPorId
     };
 }
