@@ -40,6 +40,10 @@ export default function NavBar() {
           Produtos
         </Link>
 
+        <Link href="/dashboard/estoque">
+          Estoque
+        </Link>
+
         <button
           onClick={logout}
           className="btn-sair"

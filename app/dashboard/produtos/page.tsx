@@ -25,7 +25,7 @@ export default function ProdutosPage() {
         <NavBar />
 
         {/* Como não passamos o produtoId, o form entende que é uma criação limpa */}
-        <ProdutosForm />
+       
 
         
         <div className="login-container" style={{ padding: '20px', minHeight: '100vh' }}>
